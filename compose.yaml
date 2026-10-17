@@ -1,0 +1,64 @@
+name: fatihflix
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    init: true
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 128
+    mem_limit: 1g
+    cpus: 2
+    tmpfs: ["/tmp:size=16m,mode=1777"]
+    env_file: .env
+    environment:
+      HOST: 0.0.0.0
+      PORT: 3000
+      DATA_DIR: /data
+      COOKIE_SECURE: "1"
+      PUBLIC_ORIGIN: https://${CFLIX_DOMAIN:?Set CFLIX_DOMAIN to your public domain}
+      TRUSTED_PROXY_CIDRS: 172.30.86.3/32
+      MAX_CONNECTIONS: 64
+    expose:
+      - "3000"
+    volumes:
+      - cflix_data:/data
+    networks:
+      backend:
+        ipv4_address: 172.30.86.2
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      CFLIX_DOMAIN: ${CFLIX_DOMAIN:?Set CFLIX_DOMAIN to your public domain}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      app:
+        condition: service_healthy
+    networks:
+      backend:
+        ipv4_address: 172.30.86.3
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
+networks:
+  backend:
+    ipam:
+      config:
+        - subnet: 172.30.86.0/24
+volumes:
+  cflix_data:
+    name: ${CFLIX_DATA_VOLUME:-fatihflix_data}
+  caddy_data:
+  caddy_config:

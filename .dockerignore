@@ -1,0 +1,17 @@
+*
+!Dockerfile
+!server.py
+!create_admin.py
+!retry_feedback.py
+!public/
+!public/**
+# Defense in depth if private files are accidentally placed under public/.
+**/.env*
+**/*.db
+**/*.db-*
+**/*.sqlite*
+**/*.mp4
+**/*.pem
+**/*.key
+**/*.zip
+**/*.log

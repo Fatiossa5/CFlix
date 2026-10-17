@@ -1,0 +1,26 @@
+{
+    servers {
+        timeouts {
+            read_header 15s
+            idle 2m
+        }
+        max_header_size 32KB
+    }
+}
+
+{$CFLIX_DOMAIN} {
+    header {
+        Strict-Transport-Security "max-age=31536000"
+        -Server
+    }
+    request_body {
+        max_size 2147483648
+    }
+    encode zstd gzip
+    reverse_proxy app:3000 {
+        header_up X-Real-IP {remote_host}
+        transport http {
+            dial_timeout 5s
+        }
+    }
+}
