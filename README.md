@@ -1,92 +1,253 @@
-# FatihFlix
+# 🎬 CFlix
 
-Python ve SQLite ile geliştirilen, mobil uyumlu film ve dizi kütüphanesi. Arayüzde ve bazı dosyalarda CFlix adı kullanılır. Mevcut `fatihflix.db` adı veri uyumluluğu için korunur.
+![CFlix Logo](public/assets/logo.jpg)
 
-## Özellikler
+**CFlix**, Python ve SQLite kullanılarak geliştirilmiş, mobil uyumlu, tam kapsamlı bir film ve dizi kütüphanesi web uygulamasıdır.
 
-- Kullanıcı kaydı, giriş/çıkış, şifre değiştirme ve yönetici rolleri.
-- Hesaba özel favoriler, izleme geçmişi, kaldığı yerden devam ve tür ilgisine dayalı öneriler.
-- Film/dizi ayrımı, arama ve tür filtreleri.
-- Yönetici panelinden MP4, JPG/PNG/WebP kapak ve ayrı kalite sürümleri yükleme.
-- Üyelik kontrollü video erişimi, HTTP Range ile ileri/geri sarma, mobil oynatıcı ve tam ekran.
-- SQLite üzerinde kalıcı görüş/öneri kuyruğu; Gmail SMTP, yeniden deneme ve güvenli teslimat durumu.
-- Docker Compose ile tek uygulama örneği, kalıcı veri ve Caddy üzerinden HTTPS yayını.
+Kullanıcı hesapları, kişiselleştirilmiş içerik önerileri, izleme geçmişi, video oynatıcı ve yönetici paneli gibi özellikler içerir.
 
-## Teknolojiler ve yapı
+Proje, backend ve frontend geliştirme, veritabanı yönetimi, kullanıcı kimlik doğrulama ve web uygulaması güvenliği üzerine geliştirilmiştir.
 
-Python 3.10+ standart kütüphanesi, SQLite, HTML/CSS ve ES modülleri kullanılır. Uygulama için pip veya Node.js bağımlılığı gerekmez. Docker imajı Python 3.13 kullanır.
+> **Proje durumu:** Geliştirme tamamlanmıştır. Uygulama şu anda yerel ortamda (localhost) çalışmaktadır. Herkese açık canlı bir sürümü bulunmamaktadır.
+
+## 🛠 Kullanılan Teknolojiler
+
+| Alan | Teknoloji |
+|---|---|
+| Backend | Python 3.10+ |
+| Veritabanı | SQLite |
+| Frontend | HTML5, CSS3, JavaScript |
+| JavaScript mimarisi | ES Modules |
+| API | Python HTTP Server |
+| Konteyner altyapısı | Docker, Docker Compose |
+| Ters proxy yapılandırması | Caddy |
+| E-posta entegrasyonu | Gmail SMTP |
+| Sürüm kontrolü | Git ve GitHub |
+
+Uygulama, Python standart kütüphanesiyle geliştirilmiştir. Temel çalıştırma için ek Python veya Node.js paketlerinin kurulması gerekmez. Node.js yalnızca JavaScript testlerinde kullanılır.
+
+## ✨ Özellikler
+
+### Kullanıcı Yönetimi
+- Kullanıcı kaydı ve güvenli oturum açma.
+- Oturum kapatma ve şifre değiştirme.
+- Kullanıcı ve yönetici yetkilendirmesi.
+- Hesaba özel içerik ve izleme bilgileri.
+
+### Film ve Dizi Kütüphanesi
+- Film ve dizi kategorileri.
+- İçerik arama ve tür filtreleme.
+- Kullanıcıya özel favori listeleri.
+- İzleme geçmişi ve kaldığı yerden devam etme.
+- İzleme davranışı ve tür ilgisine dayalı içerik önerileri.
+
+### Video Oynatıcı
+- MP4 video oynatma desteği.
+- HTTP Range üzerinden ileri ve geri sarma.
+- Mobil uyumlu video oynatıcı.
+- Tam ekran oynatma.
+- Ayrı yüklenmiş kalite sürümleri arasında geçiş.
+- Üyelik kontrollü medya erişimi.
+
+### Yönetici Paneli
+- Film ve dizi içeriği ekleme ve yönetme.
+- Kapak görseli yükleme (JPG, PNG, WebP).
+- MP4 video ve farklı kalite sürümlerini yükleme.
+- İçerik yönetimine yönelik yetki kontrolleri.
+
+### Görüş ve Geri Bildirim Sistemi
+- SQLite üzerinde kalıcı geri bildirim kuyruğu.
+- Gmail SMTP entegrasyonu.
+- Başarısız gönderimlerde otomatik yeniden deneme.
+- Gönderim durumunun takip edilmesi.
+
+## 📁 Proje Yapısı
 
 ```text
-server.py                 HTTP API, kimlik doğrulama, SQLite ve medya
-public/                   Arayüz ve oynatıcı
-create_admin.py           Yönetici oluşturma
-setup_gmail*.py            Yerel Gmail kurulum araçları
-retry_feedback.py         Kuyruğu elle yeniden deneme
-tests/                   Python HTTP ve JavaScript testleri
-data/fatihflix.db        Özel kullanıcı/katalog verisi (Git dışında)
-data/media/              Video ve kapaklar (Git dışında)
-compose.yaml, Caddyfile    VPS üzerinde HTTPS ve kalıcı depolama
-DEPLOY.md                 Kurulum, veri taşıma, yedek ve geri dönüş
+CFlix/
+├── public/                 # HTML, CSS, JavaScript ve oynatıcı
+├── tests/                  # Python ve JavaScript testleri
+├── server.py               # HTTP API ve uygulama sunucusu
+├── create_admin.py         # Yönetici hesabı oluşturma
+├── setup_gmail.py          # Gmail yapılandırma aracı
+├── setup_gmail_window.py   # Gmail kurulum arayüzü
+├── retry_feedback.py       # E-posta kuyruğunu yeniden deneme
+├── baslat.bat              # Windows başlatma dosyası
+├── gmail_kurulum.bat       # Windows Gmail kurulum aracı
+├── Dockerfile              # Docker imajı
+├── compose.yaml            # Docker Compose yapılandırması
+├── Caddyfile               # HTTPS ve ters proxy yapılandırması
+├── .env.example            # Örnek ortam değişkenleri
+├── .gitignore              # Git dışında tutulan dosyalar
+├── DEPLOY.md               # Dağıtım ve yedekleme dokümanı
+├── RELEASE_REPORT.md       # Test ve sürüm değerlendirmeleri
+└── README.md               # Proje dokümantasyonu
 ```
 
-## Yerel kurulum
+Uygulamanın çalışma sırasında kullandığı `data/` klasörü GitHub deposuna dahil edilmez.
 
-```sh
+Mevcut `fatihflix.db` veritabanı adı, önceki verilerle uyumluluk için korunmaktadır.
+
+## 💻 Yerel Kurulum
+
+### Gereksinimler
+
+- Python 3.10 veya üzeri.
+- Windows, Linux veya macOS.
+- Güncel bir web tarayıcısı.
+
+### 1. Projeyi bilgisayarınıza indirin
+
+```bash
+git clone https://github.com/Fatiossa5/CFlix.git
+cd CFlix
+```
+
+### 2. Python sürümünüzü kontrol edin
+
+```bash
 python --version
+```
+
+### 3. Uygulamayı başlatın
+
+```bash
 python server.py
 ```
 
-Windows'ta `baslat.bat` da kullanılabilir. Tarayıcıda `http://localhost:3000` açılır. Varsayılan dinleme adresi `0.0.0.0:3000` olduğundan aynı ağdaki cihazlar bilgisayarın ağ IP adresini kullanabilir; yalnızca yerel erişim için `HOST=127.0.0.1` ayarlayın. Telefonun `localhost` adresi telefonu gösterir.
+Windows kullanıcıları alternatif olarak `baslat.bat` dosyasını çalıştırabilir.
 
-İsteğe bağlı `.env.example` dosyasını `.env` adıyla kopyalayın. Yerel HTTP için `COOKIE_SECURE=0`; Compose üretimde bunu `1` yapar. `.env` ve `data/` özel kalmalıdır. İlk kayıtta otomatik yönetici atanmaz:
+### 4. Tarayıcı üzerinden erişin
 
-```sh
+Uygulama başlatıldıktan sonra aşağıdaki adresi açın:
+
+**http://localhost:3000**
+
+Varsayılan sunucu dinleme adresi `0.0.0.0:3000` şeklindedir. Yalnızca kendi bilgisayarınızdan erişmek için `.env` dosyasında `HOST=127.0.0.1` kullanabilirsiniz.
+
+### Ortam değişkenleri
+
+Windows PowerShell üzerinde örnek yapılandırma dosyası şu komutla kopyalanabilir:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Yerel HTTP kullanımında `COOKIE_SECURE=0` ayarı kullanılır.
+
+Gerçek `.env` dosyaları, parolalar ve kullanıcı verileri GitHub'a dahil edilmemelidir.
+
+### Yönetici hesabı oluşturma
+
+```bash
 python create_admin.py --email admin@cflix.local --name Admin
 ```
 
-Bu komut yeni hesap ve rastgele parola oluşturur. Parola terminalde bir kez gösterilir; güvenle saklayıp hesap ayarlarından değiştirin. Aynı e-posta varsa hesap, parola ve rol değiştirilmez. Mevcut yönetici taşınan veritabanında korunur.
+Bu komut yeni bir yönetici hesabı için rastgele parola oluşturur. Parola terminalde bir kez gösterilir; güvenli şekilde saklanmalıdır.
 
-## İnternet üzerinden yayın
+Mevcut hesapların parolaları ve yetkileri bu komutla değiştirilmez.
 
-Hedef: `İnternet → Caddy HTTPS → Python → /data (SQLite + medya)`.
+## 🧪 Testler
 
-Gerçek alan adı ve sürekli açık VPS gerekir. Kurulum komutları ve doğrulama listesi [DEPLOY.md](DEPLOY.md) içindedir. Üretim başlangıcı:
+Python testlerini çalıştırmak için:
 
-```sh
-cp .env.example .env
-chmod 600 .env
-# .env içinde gerçek CFLIX_DOMAIN ve isteğe bağlı SMTP ayarlarını düzenleyin.
-docker compose config --quiet
-docker compose up -d --build
-docker compose exec app python create_admin.py --email admin@cflix.local
+```bash
+python -m unittest discover -s tests -v
 ```
 
-Uygulamanın 3000 portu host'a açılmaz. Caddy 80/443 sunar; HTTP yönlendirmesi ve sertifika yönetimi gerçek DNS yönlendirmesiyle çalışır. Bu depoda çalışan genel URL veya satın alınmış kaynak bulunmaz. Yerel veriler boş sunucuya kendiliğinden taşınmaz.
+JavaScript oynatıcı testleri için:
 
-## SMTP ve görüşler
+```bash
+node --test tests/test_player.mjs tests/test_player_controls.mjs
+```
 
-`.env` içinde `FEEDBACK_RECIPIENT`, `SMTP_USERNAME`, `SMTP_PASSWORD` ve `SMTP_FROM` ayarlayın. Gmail için hesap parolası yerine Google Uygulama Şifresi kullanın. Yerel `gmail_kurulum.bat` bağlantı doğrulamayı kolaylaştırır; alıcı `.env` üzerinden ayrıca belirlenir. Kimlik bilgilerini Git'e veya sohbetlere eklemeyin.
+Öneri sistemi testleri için:
 
-Eksik ayar veya SMTP hatasında mesaj SQLite kuyruğunda kalır. Yapılandırılmış bağlantıda açılışta ve yaklaşık 60 saniyede bir en fazla 5 mesaj denenir; hatalarda bekleme artar. `python retry_feedback.py --limit 25` gerçek e-posta gönderebilir. SMTP kabulü gelen kutusuna teslim garantisi değildir; bağlantı burada gerçek Gmail hesabıyla doğrulanmamıştır.
-
-## Testler
-
-```sh
-python -m unittest discover -s tests -v
-node --test tests/test_player*.mjs
+```bash
 node --test tests/test_recommendations.mjs
 ```
 
-Node.js yalnızca JavaScript testleri için gerekir. PowerShell joker karakteri genişletmezse `node --test tests/test_player.mjs tests/test_player_controls.mjs` kullanın. Python testleri geçici SQLite ve ayrı HTTP sunucuları kullanır; SMTP taklit edilir. Medya testlerindeki sentetik dosyalar gerçek video çözme ve fiziksel cihaz testi yerine geçmez. Son doğrulama ve eksikler [RELEASE_REPORT.md](RELEASE_REPORT.md) içindedir.
+Python testleri geçici SQLite veritabanları ve ayrı HTTP sunucuları kullanır. SMTP işlemleri testlerde taklit edilir.
 
-## Güvenlik ve sınırlar
+Sentetik medya testleri, gerçek cihazlarda video çözme ve codec uyumluluğu testlerinin yerine geçmez.
 
-Parolalar 600.000 turlu PBKDF2-SHA256 ve rastgele tuzla saklanır. Oturum çerezleri HttpOnly/SameSite=Strict; üretimde Secure'dür. Parametreli SQL, yönetici yetki denetimi, kaynak/JSON CSRF kontrolü, dosya imzası/boyutu/yolu kontrolü ve CSP başlıkları uygulanır. Yüklenen videolar giriş gerektirir; kapaklar ve katalog herkese açıktır. Üyelik ücretli abonelik anlamına gelmez.
+Ayrıntılı değerlendirmeler [RELEASE_REPORT.md](RELEASE_REPORT.md) dosyasındadır.
 
-Tek süreç/tek instance desteklenir. Oturumlar ve deneme sayaçları bellektedir; yeniden başlatmada oturumlar biter ve sayaçlar sıfırlanır. Kullanıcılar, favoriler, geçmiş, katalog, medya ve e-posta kuyruğu kalıcıdır. Compose volume'larını silmeyin (`down -v` kullanmayın). Yedeklerde veritabanı ve medya birlikte tutulur.
+## 🔐 Güvenlik
 
-HTTP işleyicisi mevcut API'leri korumak için standart kütüphanede kalır; 64 eşzamanlı bağlantı ve 120 saniye soket bekleme sınırı eklenmiştir. Caddy zorunlu dış katmandır. Python [http.server belgesi](https://docs.python.org/3/library/http.server.html) üretim kısıtlarını açıklar; yüksek trafik veya DDoS dayanıklılığı garantisi yoktur. Yük testi yapılmadan kapasite iddiasında bulunulmaz. E-posta doğrulama, şifre sıfırlama, MFA, CDN, çoklu instance ve otomatik video dönüştürme yoktur.
+CFlix aşağıdaki güvenlik mekanizmalarını içerir:
 
-MP4 en fazla 2 GiB, kapak en fazla 10 MiB olabilir. Kalite sürümlerini yönetici ayrı yükler; otomatik kodlama yapılmaz. Dizilerde her bölüm ayrı içerik olarak eklenebilir. Yayınlanmayan yüklemeler için otomatik temizlik yoktur.
+- PBKDF2-SHA256 ile parola özetleme ve rastgele tuz kullanımı.
+- HttpOnly ve SameSite=Strict oturum çerezleri.
+- HTTPS ortamları için Secure çerez yapılandırması.
+- Parametreli SQL sorguları.
+- Yönetici yetki denetimleri.
+- CSRF kontrolleri.
+- Dosya uzantısı, imzası, boyutu ve yolu doğrulamaları.
+- Content Security Policy (CSP) başlıkları.
+- Erişim kontrollü video dosyaları.
+- Bağlantı sayısı ve soket bekleme süresi sınırları.
 
-Örnek katalog kurgusaldır ve Big Buck Bunny tanıtım videosunu kullanır. Örnek video Google depolamasından, görseller Unsplash'ten, yazı tipleri Google Fonts'tan gelir. Yüklenen içerikler kendi dosyalarını oynatır. Dış kaynak erişimi ve gerçek cihazda codec uyumu ayrıca sınanmalıdır. Yalnızca yayın hakkınız olan içerikleri yükleyin.
+Bu önlemler uygulamanın tüm tehditlere karşı güvenli olduğunu garanti etmez. Özellikle internet üzerinden kullanım öncesinde ayrıca güvenlik ve yük testleri gerekir.
+
+## ✉️ Gmail SMTP Entegrasyonu
+
+Geri bildirim sisteminde Gmail SMTP kullanılabilir.
+
+Gerekli ortam değişkenleri:
+
+```dotenv
+SMTP_USERNAME=
+SMTP_PASSWORD=
+SMTP_FROM=
+FEEDBACK_RECIPIENT=
+```
+
+Gmail bağlantısı için hesap parolası yerine Google Uygulama Şifresi kullanılmalıdır.
+
+SMTP yapılandırması yapılmadığında veya gönderim başarısız olduğunda mesajlar SQLite kuyruğunda saklanır.
+
+Gerekirse kuyruk aşağıdaki komutla yeniden denenebilir:
+
+```bash
+python retry_feedback.py --limit 25
+```
+
+Bu komut SMTP yapılandırılmışsa gerçek e-posta gönderimi yapabilir.
+
+## 🐳 Docker ve Dağıtım Yapılandırması
+
+Projede Docker Compose, kalıcı veri depolaması ve Caddy üzerinden HTTPS kullanımını destekleyen yapılandırma dosyaları bulunmaktadır.
+
+Ancak **CFlix şu anda yalnızca yerel ortamda çalıştırılmaktadır.** Herkese açık sunucuya dağıtım yapılmamıştır.
+
+Gelecekteki dağıtım çalışmaları için teknik bilgiler [DEPLOY.md](DEPLOY.md) dosyasında tutulmaktadır.
+
+## ⚠️ Bilinen Sınırlar
+
+- Uygulama tek süreç ve tek instance mimarisini destekler.
+- Oturumlar ve bazı sınırlama sayaçları bellekte tutulur; yeniden başlatmada sıfırlanabilir.
+- Kullanıcılar, katalog, favoriler, izleme geçmişi ve medya verileri SQLite ve yerel depolama üzerinden korunur.
+- E-posta doğrulama, otomatik şifre sıfırlama ve çok faktörlü kimlik doğrulama mevcut değildir.
+- Çoklu sunucu çalıştırma, CDN ve otomatik video dönüştürme desteği bulunmaz.
+- Video yüklemelerinde 2 GiB, kapak görsellerinde 10 MiB sınırı vardır.
+- Farklı video kalite sürümleri yönetici tarafından ayrı ayrı yüklenir.
+- Yük testi tamamlanmadan yüksek trafik kapasitesi iddia edilmez.
+
+Örnek katalogda kullanılan harici tanıtım videosu, görseller ve yazı tipleri dış kaynaklara bağlı olabilir. Yalnızca kullanım veya yayın hakkına sahip olunan medya dosyaları eklenmelidir.
+
+## 📌 Proje Durumu
+
+**CFlix, yerel kullanım için geliştirilmiş bir portföy projesidir.**
+
+Kaynak kodları GitHub üzerinden incelenebilir. Gerçek kullanıcı verileri, özel yapılandırmalar ve yüklenen medya dosyaları depoda bulunmaz.
+
+## 👨‍💻 Geliştirici
+
+**Muhammed Fatih Atmaca**
+
+GitHub: [@Fatiossa5](https://github.com/Fatiossa5)
+
+---
+
+*CFlix — Film ve dizi kütüphanesi web uygulaması.*
